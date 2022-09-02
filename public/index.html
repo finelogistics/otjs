@@ -134,7 +134,7 @@
             <div class="item"></div>
           </div>
           <div class="group info">
-            <div class="item"></div>
+            <div class="item map tv tv:.modal.map lang lang-STR_TOOLBAR_TOOLTIP_DISPLAY_MAP"></div>
             <div class="item"></div>
             <div class="item"></div>
             <div class="item"></div>
@@ -206,9 +206,20 @@
     }
 
     window.dragMoveListener = dragMoveListener;
-  </script>
-  <script>
-    let z=0;[...document.querySelectorAll('.modal')].map(e => e.addEventListener('mousedown', ev => ev.target.style.zIndex=++z))
+    let z=0;[...document.querySelectorAll('.modal')].map(e => e.addEventListener('mousedown', ev => ev.target.style.zIndex=++z));
+    tv = [...document.querySelectorAll('.tv')]
+    tv.map(e => {
+      const toggle = (ev) => [...ev.target.classList]
+        .filter(e => e.startsWith('tv:'))
+        .map(e => e.split('tv:')[1])
+        .forEach((e, s, nextd) => {
+          console.info('toggle visiblity: toggling modal')
+          s=document.querySelector(e).style;
+          nextd = (s.display != 'none' ? 'none' : 'block');
+          s.display = nextd;
+        })
+      e.addEventListener('click', toggle)
+    })
   </script>
 </body>
 </html>
