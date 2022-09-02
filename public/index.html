@@ -60,8 +60,13 @@
       clear: both;
     }
     .modals > * {
-      display: inline-block;
+      /* display: inline-block; */
       position: absolute;
+      display: none;
+    }
+    .modal > textarea.resize:first-child,.modal > textarea:first-child {
+      width: 100%;
+      height: 100%;
     }
     .modals .user {
       background-image: url(./finance-map-dotations-cities-stations-user.png);
@@ -134,14 +139,14 @@
             <div class="item"></div>
           </div>
           <div class="group info">
-            <div class="item tv tv:.modal.map   lang lang:STR_TOOLBAR_TOOLTIP_DISPLAY_MAP"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+            <div class="item tv tv:.modal.map       lang lang:STR_TOOLBAR_TOOLTIP_DISPLAY_MAP"></div>
+            <div class="item tv tv:.cities.modal    lang lang:STR_TOOLBAR_TOOLTIP_DISPLAY_TOWN_DIRECTORY"></div>
+            <div class="item tv tv:.dotations.modal lang lang:STR_TOOLBAR_TOOLTIP_DISPLAY_SUBSIDIES"></div>
+            <div class="item tv tv:.stations.modal  lang lang:STR_TOOLBAR_TOOLTIP_DISPLAY_LIST_OF_COMPANY_STATIONS"></div>
           </div>
           <div class="group">
-            <div class="item"></div>
-            <div class="item"></div>
+            <div class="item tv tv:.modal.finance"></div>
+            <div class="item tv tv:.modal.user"></div>
             <div class="item"></div>
             <div class="item"></div>
             <div class="item"></div>
@@ -173,7 +178,9 @@
           </div>
         </div>
         <div class="modals">
-          <div class="map modal"></div>
+          <div class="map modal">
+            <textarea onpointerdown="event.stopPropagation()"></textarea>
+          </div>
           <div class="user modal"></div>
           <div class="stations modal"></div>
           <div class="finance modal"></div>
@@ -215,7 +222,8 @@
         .forEach((e, s, nextd) => {
           console.info('toggle visiblity: toggling modal')
           s=document.querySelector(e).style;
-          nextd = (s.display != 'none' ? 'none' : 'block');
+          // nextd = (s.display === 'none' ? 'block' : 'none');
+          nextd = (s.display === 'block' ? 'none' : 'block');
           s.display = nextd;
         })
       e.addEventListener('click', toggle)
