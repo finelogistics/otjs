@@ -191,7 +191,6 @@
       listeners: {
         move: dragMoveListener,
         end (event) {
-          console.log(event.pageX, event.pageY)
         },
       },
     })
@@ -206,7 +205,10 @@
       target.setAttribute('data-y', y)
     }
 
-    window.dragMoveListener = dragMoveListener
+    window.dragMoveListener = dragMoveListener;
+  </script>
+  <script>
+  [...document.querySelectorAll('.modal')].map(e => e.addEventListener('click', ev => ev.target.style.zIndex=(ev.target.style.zIndex||0)+1))
   </script>
 </body>
 </html>
