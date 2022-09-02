@@ -45,6 +45,22 @@
       margin-top: 82px;
       background-position-y: -82px;
     }
+    .modals {
+      /* float: left; aligns to the bottom */
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .modals:after {
+      /* https://css-tricks.com/almanac/properties/f/float/ */
+      content: "";
+      visibility: hidden;
+      display: block;
+      height: 0;
+      clear: both;
+    }
+    .modals > * {
+      display: inline-block;
+    }
     .modals .user {
       background-image: url(./finance-map-dotations-cities-stations-user.png);
       width: 1149px;
@@ -54,10 +70,41 @@
       /* margin-top: 200px; */
       /* margin-left: 20px; */
     }
-    .modals .map {}
-    .modals .finance {}
-    .modals .cities {}
-    .modals .dotations {}
+    .modals .map {
+      background-image: url(./finance-map-dotations-cities-stations-user.png);
+      width: 1403px;
+      height: 845px;
+      background-position-x: 2px;
+      background-position-y: -84px;
+    }
+    .modals .finance {
+      background-image: url(./finance-map-dotations-cities-stations-user.png);
+      width: 1122px;
+      height: 563px;
+      background-position-x: 1122px;
+      background-position-y: -830px;
+    }
+    .modals .cities {
+      background-image: url(./finance-map-dotations-cities-stations-user.png);
+      width: 607px;
+      height: 347px;
+      background-position-x: 1796px;
+      background-position-y: -171px;
+    }
+    .modals .dotations {
+      background-image: url(./finance-map-dotations-cities-stations-user.png);
+      width: 605px;
+      height: 213px;
+      background-position-x: 624px;
+      background-position-y: 984px;
+    }
+    .modals .stations {
+      background-image: url(./finance-map-dotations-cities-stations-user.png);
+      width: 1433px;
+      height: 458px;
+      background-position-x: 2px;
+      background-position-y: 506px;
+    }
     .menu .savegame {}
     .menu .newgame {}
   </style>
@@ -114,8 +161,12 @@
           </div>
         </div>
         <div class="modals">
+          <div class="map"></div>
           <div class="user"></div>
+          <div class="stations"></div>
           <div class="finance"></div>
+          <div class="cities"></div>
+          <div class="dotations"></div>
         </div>
       </div>
     </div>
