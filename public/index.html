@@ -17,6 +17,25 @@
       height: 82px;
       position: fixed;
       top: 0px;
+      /* render */
+      display: flex;
+      gap: 17px;
+    }
+    .toolbar .group {
+      display: flex;
+      /* margin-left: 11px; */
+    }
+    .toolbar .group:first-child{
+      margin-left: 0px;
+    }
+    .toolbar .group .item {
+      width: 82px;
+      height: 82px;
+      gap: 1px;
+      /* margin-left: 1px; */
+    }
+    .item:hover {
+      outline: 1px solid yellow;
     }
     .general {
       background-image: url(./otjs.png);
@@ -33,7 +52,52 @@
     <div class="game">
       <div class="menu"></div>
       <div class="general">
-        <div class="toolbar"></div>
+        <div class="toolbar">
+          <div class="controls group">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
+          <div class="group info">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
+          <div class="group">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
+          <div class="group">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
+          <div class="group">
+            <div class="item zoom-in"></div>
+            <div class="item zoom-out"></div>
+          </div>
+          <div class="group infrastructure">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
+          <div class="group misc">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
+        </div>
         <div class="modals">
           <div class="players"></div>
         </div>
