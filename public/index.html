@@ -67,6 +67,7 @@
     .modal > textarea.resize:first-child,.modal > textarea:first-child {
       width: 100%;
       height: 100%;
+      opacity: 0.01;
     }
     .modals .user {
       background-image: url(./finance-map-dotations-cities-stations-user.png);
@@ -179,7 +180,7 @@
         </div>
         <div class="modals">
           <div class="map modal">
-            <textarea onpointerdown="event.stopPropagation()"></textarea>
+            <textarea class="resize" onpointerdown="resizeParentStart(event)"></textarea>
           </div>
           <div class="user modal"></div>
           <div class="stations modal"></div>
@@ -228,6 +229,27 @@
         })
       e.addEventListener('click', toggle)
     })
+
+    function resizeParentStart(event) {
+      const el = event.target
+      event.stopPropagation()
+      const move = ev => {
+        console.log(ev)
+        // ev.target
+        ev.target.parentElement.style.width = ev.target.clientWidth + 'px'
+        ev.target.parentElement.style.height = ev.target.clientHeight + 'px'
+      };
+      el.addEventListener('pointermove', move)
+      // function hnd.up() {
+      // function "hnd.up"() {
+      // function ['hnd.up']() {
+      const hnd = {} // why not hnd = {up() {...}}?
+      hnd.up = function hndup() {
+        el.removeEventListener('pointermove', move)
+        el.removeEventListener('up', hnd.up)
+      }
+      el.addEventListener('pointerup', hnd.up)
+    }
   </script>
 </body>
 </html>
