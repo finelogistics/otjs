@@ -34,7 +34,7 @@
       gap: 1px;
       /* margin-left: 1px; */
     }
-    .item:hover {
+    .item:hover,.hover\:outline:hover {
       outline: 1px solid yellow;
     }
     .general {
@@ -50,6 +50,11 @@
       display: flex;
       flex-wrap: wrap;
       position: relative;
+      /* draggable interact fix */
+      /* min-height: 100vh; */
+      /* min-width: 100vw; */
+      min-height: calc(100vh - 100px);
+      min-width: calc(100vw - 100px);
     }
     .modals:after {
       /* https://css-tricks.com/almanac/properties/f/float/ */
@@ -63,11 +68,48 @@
       /* display: inline-block; */
       position: absolute;
       display: none;
+      z-index: 1;
     }
     .modal > textarea.resize:first-child,.modal > textarea:first-child {
+      /* width: 100%; */
+      /* height: 100%; */
+      /* opacity: 0.3; */
+    }
+    .modal .utils {
+      position: relative;
+      z-index: -1;
       width: 100%;
       height: 100%;
-      opacity: 0.01;
+    }
+    .rel {
+      position: relative;
+    }
+    .abs {
+      position: absolute;
+    }
+    .inset-0 {
+      inset: 0;
+    }
+    .modal .utils .rb-corner {
+      position: absolute;
+      right: 0px;
+      bottom: 0px;
+      width: 30px;
+      height: 30px;
+    }
+    .rb-corner,
+    .rb-corner:hover {
+      outline: 1px solid yellow;
+      z-index: 99999;
+    }
+    .rb-corner.rb-corner:hover {
+      z-index: 0;
+    }
+    .modals .map .rb-corner + div > textarea {
+      display: none;
+    }
+    .modals .map .rb-corner:hover ~ div>textarea {
+      display: block;
     }
     .modals .user {
       background-image: url(./finance-map-dotations-cities-stations-user.png);
@@ -86,6 +128,13 @@
       height: 845px;
       background-position-x: 2px;
       background-position-y: -84px;
+    }
+    .modals .map textarea {
+      /* width: 1403px; */
+      /* height: 845px; */
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
     }
     .modals .finance {
       background-image: url(./finance-map-dotations-cities-stations-user.png);
@@ -179,8 +228,13 @@
           </div>
         </div>
         <div class="modals">
-          <div class="map modal">
-            <textarea class="resize" onpointerdown="resizeParentStart(event)"></textarea>
+          <div class="map modal" style="display: block">
+            <!-- <div class="rel utils">
+              <div class="abs rb-corner tv tv:-textarea tv:.resize hover:outline"></div>
+              <div class="abs inset-0">
+                <textarea class="resize" onpointerdown="resizeParentStart(event)"></textarea>
+              </div>
+            </div> -->
           </div>
           <div class="user modal"></div>
           <div class="stations modal"></div>
@@ -194,14 +248,6 @@
   <!-- <script defer src="https://unpkg.com/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.legacy.js"></script> -->
   <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
   <script defer>
-
-    interact('.modal').draggable({
-      listeners: {
-        move: dragMoveListener,
-        end (event) {
-        },
-      },
-    })
     function dragMoveListener (event) {
       var target = event.target
       var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
@@ -212,9 +258,62 @@
       target.setAttribute('data-x', x)
       target.setAttribute('data-y', y)
     }
+    interact('.modal').draggable({
+      // inertia: true,
+      modifiers: [
+        interact.modifiers.restrictRect({
+          // restriction: 'parent',
+          endOnly: true
+        }),
+        // interact.modifiers.elementRect({top: 0.25, left: 0.25, bottom: 0.75, right: 0.75}),
+      ],
+      restrict: {
+          elementRect: {top: 0.25, left: 0.25, bottom: 0.75, right: 0.75}
+      },
+      // autoScroll: true,
+      listeners: {
+        move: dragMoveListener,
+        end (event) {
+        },
+      },
+    }).resizable({
+      edges: { top: false, left: false, bottom: true, right: true },
+      modifiers: [
+        interact.modifiers.restrictSize({
+          min: { width: 100, height: 50 }
+        }),
+      ],
+      listeners: {
+        move: function (event) {
+          let { x, y } = event.target.dataset
+
+          x = (parseFloat(x) || 0) + event.deltaRect.left
+          y = (parseFloat(y) || 0) + event.deltaRect.top
+
+          Object.assign(event.target.style, {
+            width: `${event.rect.width}px`,
+            height: `${event.rect.height}px`,
+            transform: `translate(${x}px, ${y}px)`
+          })
+
+          // Object.assign(event.target.dataset, { x, y })
+        },
+        onResizeEnd (event) {
+          event.interactable.draggable({
+            restrict: { top: 0.25, left: 0.25, bottom: 0.75, right: 0.75 }
+          });
+        }
+      }
+    })
+
 
     window.dragMoveListener = dragMoveListener;
-    let z=0;[...document.querySelectorAll('.modal')].map(e => e.addEventListener('mousedown', ev => ev.target.style.zIndex=++z));
+    function registerLayering() {
+      let z=0;
+      [...document.querySelectorAll('.modal')]
+        .map(e => e.addEventListener('mousedown', ev => ev.target.closest('.modal').style.zIndex=++z));
+    }
+    registerLayering()
     tv = [...document.querySelectorAll('.tv')]
     tv.map(e => {
       const toggle = (ev) => [...ev.target.classList]
@@ -236,8 +335,9 @@
       const move = ev => {
         console.log(ev)
         // ev.target
-        ev.target.parentElement.style.width = ev.target.clientWidth + 'px'
-        ev.target.parentElement.style.height = ev.target.clientHeight + 'px'
+        const tEl = ev.target.parentElement
+        tEl.style.width = ev.target.clientWidth + 'px'
+        tEl.style.height = ev.target.clientHeight + 'px'
       };
       el.addEventListener('pointermove', move)
       // function hnd.up() {
