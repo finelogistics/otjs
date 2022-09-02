@@ -173,15 +173,40 @@
           </div>
         </div>
         <div class="modals">
-          <div class="map"></div>
-          <div class="user"></div>
-          <div class="stations"></div>
-          <div class="finance"></div>
-          <div class="cities"></div>
-          <div class="dotations"></div>
+          <div class="map modal"></div>
+          <div class="user modal"></div>
+          <div class="stations modal"></div>
+          <div class="finance modal"></div>
+          <div class="cities modal"></div>
+          <div class="dotations modal"></div>
         </div>
       </div>
     </div>
   </div>
+  <!-- <script defer src="https://unpkg.com/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.legacy.js"></script> -->
+  <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+  <script defer>
+
+    interact('.modal').draggable({
+      listeners: {
+        move: dragMoveListener,
+        end (event) {
+          console.log(event.pageX, event.pageY)
+        },
+      },
+    })
+    function dragMoveListener (event) {
+      var target = event.target
+      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+      target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+      target.setAttribute('data-x', x)
+      target.setAttribute('data-y', y)
+    }
+
+    window.dragMoveListener = dragMoveListener
+  </script>
 </body>
 </html>
